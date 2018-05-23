@@ -1,0 +1,11 @@
+.product-box{
+    border: 1px solid grey;
+}
+
+.img-tumbnail-clean{
+    border: 0px solid;
+}
+
+.card-body h6{
+    font-size: 0.7rem;
+}
