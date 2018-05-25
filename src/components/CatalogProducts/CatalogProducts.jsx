@@ -18,7 +18,7 @@ class CatalogProucts extends React.Component {
                       <img
                         className="img-thumbnail img-tumbnail-clean"
                         src={product.image}
-                        alt="gold-ring"/>
+                        alt={product.product_name}/>
                       <h6 className="card-title mt-4">{product.brand_name}</h6>
                       <h6 className="card-subtitle mb-2 text-muted">{product.product_name}</h6>
                       <button onClick={this.props.addToWishList.bind(this, product.pk, product.stock_number)} className="btn btn-sm btn-outline-secondary mt-4">&#9825; Add</button>
