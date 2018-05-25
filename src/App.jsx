@@ -7,6 +7,7 @@ import PaginationToolbar    from './components/PaginationToolbar/PaginationToolb
 import Wishlist             from './components/Wishlist/Wishlist.jsx';
 
 class App extends Component {
+
   state = {
     productList: [],
     wishList: []
@@ -16,120 +17,98 @@ class App extends Component {
     super(props);
     this.showProductList();
     this.showWishList()
-
   }
 
   showProductList = () => {
     fetch('http://127.0.0.1:8000/api/products/')
-    .then(
-      (response) => {
-        console.log(response)
-        return response.json()
-      })
-    .then(
-      (data) => {
-        const productListNew = data;
-        this.setState({
-          productList: productListNew
+      .then(
+        (response) => {
+          return response.json()
         })
-        console.log(this.state.productList)
-      }
-    )
-    
+      .then(
+        (data) => {
+          this.setState({
+            productList: data
+          })
+        }
+      )
   }
-
 
   showWishList = () => {
     fetch('http://127.0.0.1:8000/api/showwishlist/')
-    .then(
-      (response) => {
-        console.log(response)
-        return response.json()
-      })
-    .then(
-      (data) => {
-        const wishListNew = data;
-        this.setState({
-          wishList: wishListNew
+      .then(
+        (response) => {
+          return response.json()
         })
-        console.log(this.state.wishList)
-      }
-    )
+      .then(
+        (data) => {
+          const wishListNew = data;
+          this.setState({
+            wishList: wishListNew
+          })
+        }
+      )
   }
-
-
-
-
 
   addToWishList = (pk, stock_number, e) => {
     e.preventDefault();
-
-      let checkWishItem = this.state.wishList.findIndex((wish) => {
-        console.log("wish", wish.stock_number);
-        return wish.stock_number === stock_number;
-      });
-      if (checkWishItem === -1) {
-
-        let url = 'http://127.0.0.1:8000/api/wishlist/';
-        fetch(url, {
+    //Add to database
+    const checkWishItem = this.state.wishList.findIndex((wish) => {
+      return wish.stock_number === stock_number;
+    });
+    if (checkWishItem === -1) {
+      const url = 'http://127.0.0.1:8000/api/wishlist/';
+      fetch(url, {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
           method: "POST",
-          body: JSON.stringify({'name': pk})
+          body: JSON.stringify({
+            'name': pk
+          })
         })
         .then((response) => {
-          console.log(response)
           return response.json();
-          
         })
-    
+      //Add to state
+      const index = this.state.productList.findIndex((product) => {
+        return product.pk === pk;
+      });
 
-        let index = this.state.productList.findIndex((product) => {
-          return product.pk === pk;
-        });
-        let product = this.state.productList[index];
+      const product = this.state.productList[index];
 
-        this.setState({
-          wishList: [...this.state.wishList, product]
-        })
+      this.setState({
+        wishList: [...this.state.wishList, product]
+      })
 
-      }
+    }
   }
 
   deleteFromWishList = (pk, e) => {
-    let url = 'http://127.0.0.1:8000/api/wishlist/'+pk+'/';
-        fetch(url, {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          method: "DELETE",
-          body: JSON.stringify({'name': pk})
-        })
-       
+    e.preventDefault();
+    //Delete form database
+    const url = 'http://127.0.0.1:8000/api/wishlist/' + pk + '/';
+    fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "DELETE",
+      body: JSON.stringify({
+        'name': pk
+      })
+    })
+    //Delete form state
+    const indexToDelete = this.state.wishList.findIndex((product) => {
+      return product.pk === pk;
+    })
 
+    this.setState({
+      wishList: this.state.wishList.filter((_, i) => i !== indexToDelete)
+    });
 
-       
-        const indexToDelete = this.state.wishList.findIndex((product) => {
-          return product.pk === pk;
-        })
-
-        
-
-        this.setState({
-          wishList: this.state.wishList.filter((_, i) => i !== indexToDelete)
-        });
-
-
-     
-       
   }
-
-
-  // addToWishList = ()
- 
 
   render() {
     return (
