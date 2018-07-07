@@ -9,6 +9,13 @@ class Wishlist extends React.Component {
 
         return (
             <div className="col-md-12">
+            <form onSubmit={this.props.showWishList}>
+            <label>
+                Name:
+                <input type="text" name="name" />
+            </label>
+            <input type="submit" value="Submit" />
+            </form>
                 <div className="row row-border pt-2 pb-2">
                     <div className="col-md-2 col-lg-2 d-flex align-items-center">
                         <h5>My Wishlist</h5>

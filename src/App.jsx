@@ -10,7 +10,8 @@ class App extends Component {
 
   state = {
     productList: [],
-    wishList: []
+    wishList: [],
+    wishNumber : undefined
   }
 
   constructor(props) {
@@ -35,7 +36,10 @@ class App extends Component {
   }
 
   showWishList = () => {
+
+ 
     fetch('http://127.0.0.1:8000/api/showwishlist/')
+    
       .then(
         (response) => {
           return response.json()
@@ -48,6 +52,24 @@ class App extends Component {
           })
         }
       )
+  }
+
+  wishNumberHandler = (event) => {
+    fetch('http://127.0.0.1:8000/api/showwishlist/' + event.target.value)
+    
+    .then(
+      (response) => {
+        return response.json()
+      })
+    .then(
+      (data) => {
+        const wishListNew = data;
+        this.setState({
+          wishList: wishListNew
+        })
+      }
+    )
+
   }
 
   addToWishList = (pk, stock_number, e) => {
@@ -120,6 +142,7 @@ class App extends Component {
           <Wishlist 
           wishList = {this.state.wishList}
           deleteFromWishList = {this.deleteFromWishList}
+          wishNumber = {this.state.wishNumber}
           />
         </div>
         <div className="row mt-2">
