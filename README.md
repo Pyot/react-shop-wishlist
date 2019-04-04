@@ -1,7 +1,5 @@
 # Typethink - Recruitment Task
 
-# Typethink - Recruitment Task
-
 Functionality that allow user add items from a product list to a wishlist. User can add and delete products form it. React is communicating with API written in Django.
 
 ## Technologies used for this project:
